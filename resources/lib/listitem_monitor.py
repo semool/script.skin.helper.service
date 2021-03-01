@@ -353,16 +353,17 @@ class ListItemMonitor(threading.Thread):
                     details = merge_dict(
                         details, self.get_streamdetails(
                             details["dbid"], details["path"], content_type))
+                    # Disable when get_top250 gets crazy
                     details = merge_dict(details, self.metadatautils.get_top250_rating(details["imdbnumber"]))
 
                     if self.exit:
                         return
 
                     # tvshows-only properties (tvdb)
-                    if content_type in ["tvshows", "seasons", "episodes"]:
-                        details = merge_dict(
-                            details, self.metadatautils.get_tvdb_details(
-                                details["imdbnumber"], tvdbid))
+                    #if content_type in ["tvshows", "seasons", "episodes"]:
+                    #    details = merge_dict(
+                    #        details, self.metadatautils.get_tvdb_details(
+                    #            details["imdbnumber"], tvdbid))
 
                     # movies-only properties (tmdb, animated art)
                     if content_type in ["movies", "setmovies", "tvshows"]:

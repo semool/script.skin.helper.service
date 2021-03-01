@@ -189,11 +189,12 @@ class KodiMonitor(xbmc.Monitor):
             details = self.metadatautils.extend_dict(details, self.metadatautils.get_omdb_info(li_imdb))
             if li_dbid:
                 details = self.metadatautils.extend_dict(details, self.metadatautils.get_streamdetails(li_dbid, mediatype))
+            # Disable when get_top250 gets crazy
             details = self.metadatautils.extend_dict(details, self.metadatautils.get_top250_rating(li_imdb))
 
             # tvshows-only properties (tvdb)
-            if mediatype == "episode":
-                details = self.metadatautils.extend_dict(details, self.metadatautils.get_tvdb_details(li_imdb, li_tvdb))
+            #if mediatype == "episode":
+            #    details = self.metadatautils.extend_dict(details, self.metadatautils.get_tvdb_details(li_imdb, li_tvdb))
 
             # movies-only properties (tmdb, animated art)
             if mediatype == "movie":
