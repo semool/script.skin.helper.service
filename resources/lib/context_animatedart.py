@@ -30,7 +30,10 @@ def get_imdb_id(win, metadatautils):
             title = try_decode(xbmc.getInfoLabel("ListItem.TvShowTitle"))
         if title:
             log_msg("Animated Art: lookup imdbid by title and year: (%s - %s)" % (title, year), xbmc.LOGINFO)
-            imdb_id = metadatautils.get_omdb_info("", title, year, content_type).get("imdbnumber", "")
+            try:
+              imdb_id = metadatautils.get_omdb_info("", title, year, content_type).get("imdbnumber", "")
+            except:
+              pass
         if not imdb_id:
             return title
     return imdb_id
