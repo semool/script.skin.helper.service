@@ -492,7 +492,8 @@ class SkinSettings:
         # create listitems
         listitems = []
         for label, imagepath, label2, icon in images:
-            listitem = xbmcgui.ListItem(label=label, label2=label2, iconImage=icon)
+            listitem = xbmcgui.ListItem(label=label, label2=label2)
+            listitem.setArt({'icon': icon, 'thumb': icon, 'fanart': icon})
             listitem.setPath(imagepath)
             listitems.append(listitem)
 
@@ -525,7 +526,7 @@ class SkinSettings:
                 else:
                     return self.selectimage()
             # return values
-            return (try_decode(result.getLabel()), try_decode(result.getfilename()))
+            return (try_decode(result.getLabel()), try_decode(result.getPath()))
         # return empty values
         return ("", "")
 
