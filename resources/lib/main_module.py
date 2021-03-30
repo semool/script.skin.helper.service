@@ -12,14 +12,9 @@ import xbmc
 import xbmcvfs
 import xbmcgui
 import xbmcaddon
-if sys.version_info.major == 3:
-    from .skinsettings import SkinSettings
-    import urllib.parse
-    from .dialogselect import DialogSelect
-else:
-    from skinsettings import SkinSettings
-    import urlparse
-    from dialogselect import DialogSelect
+from .skinsettings import SkinSettings
+import urllib.parse
+from .dialogselect import DialogSelect
 from resources.lib.utils import log_msg, KODI_VERSION, kodi_json, clean_string, getCondVisibility
 from resources.lib.utils import log_exception, get_current_content_type, ADDON_ID, recursive_delete_dir, try_decode
 from simplecache import SimpleCache
@@ -80,12 +75,8 @@ class MainModule:
         action = self.params.get("action")
         log_msg("Deprecated method: %s. Please call %s directly" % (action, newaddon), xbmc.LOGWARNING)
         paramstring = ""
-        if sys.version_info.major == 3:
-            for key, value in self.params.items():
-                paramstring += ",%s=%s" % (key, value)
-        else:
-            for key, value in self.params.iteritems():
-                paramstring += ",%s=%s" % (key, value)
+        for key, value in self.params.items():
+            paramstring += ",%s=%s" % (key, value)
         if getCondVisibility("System.HasAddon(%s)" % newaddon):
             xbmc.executebuiltin("RunAddon(%s%s)" % (newaddon, paramstring))
         else:
@@ -137,10 +128,7 @@ class MainModule:
             listitem.setProperty("id", "None")
             all_views.append(listitem)
         # read the special skin views file
-        if sys.version_info.major == 3:
-            views_file = try_decode(xbmcvfs.translatePath('special://skin/extras/views.xml'))
-        else:
-            views_file = try_decode(xbmc.translatePath('special://skin/extras/views.xml'))
+        views_file = try_decode(xbmcvfs.translatePath('special://skin/extras/views.xml'))
         if xbmcvfs.exists(views_file):
             doc = parse(views_file)
             listing = doc.documentElement.getElementsByTagName('view')
@@ -180,10 +168,7 @@ class MainModule:
     def enableviews(self):
         '''show select dialog to enable/disable views'''
         all_views = []
-        if sys.version_info.major == 3:
-            views_file = try_decode(xbmcvfs.translatePath('special://skin/extras/views.xml'))
-        else:
-            views_file = try_decode(xbmc.translatePath('special://skin/extras/views.xml'))
+        views_file = try_decode(xbmcvfs.translatePath('special://skin/extras/views.xml'))
         richlayout = self.params.get("richlayout", "") == "true"
         if xbmcvfs.exists(views_file):
             doc = parse(views_file)
@@ -367,7 +352,7 @@ class MainModule:
         setting = self.params.get("setting", "")
         org_id = self.params.get("id", "")
         if "$" in org_id:
-            org_id = try_decode(xbmc.getInfoLabel(org_id))
+            org_id = xbmc.getInfoLabel(org_id)
         header = self.params.get("header", "")
         SkinSettings().set_skin_setting(setting=setting, window_header=header, original_id=org_id)
 
@@ -579,8 +564,6 @@ class MainModule:
                     # we got an dynamic image from window property
                     skinsettings.set_skin_variable(skinstring, value)
                     value = "$VAR[%s]" % skinstring
-                skinstring = skinstring.encode("utf-8")
-                label = label.encode("utf-8")
                 xbmc.executebuiltin("Skin.SetString(%s.label,%s)" % (skinstring, label))
                 xbmc.executebuiltin("Skin.SetString(%s.name,%s)" % (skinstring, label))
                 xbmc.executebuiltin("Skin.SetString(%s,%s)" % (skinstring, value))
