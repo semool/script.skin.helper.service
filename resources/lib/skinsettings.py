@@ -49,7 +49,7 @@ class SkinSettings:
             if extensionpoint.attrib.get("point") == "xbmc.gui.skin":
                 resolutions = extensionpoint.findall("res")
                 for resolution in resolutions:
-                    includes_file = xbmc.translatePath(
+                    includes_file = xbmcvfs.translatePath(
                         os.path.join(
                             "special://skin/",
                             try_decode(
@@ -66,7 +66,7 @@ class SkinSettings:
                                 # also write to skin strings
                                 xbmc.executebuiltin(
                                     "Skin.SetString(%s,%s)" %
-                                    (key.encode("utf-8"), value.encode("utf-8")))
+                                    (key, value))
                     if variables:
                         for key, value in list(variables.items()):
                             if value:
@@ -75,7 +75,7 @@ class SkinSettings:
                                 child2 = xmltree.SubElement(child, "value")
                                 child2.text = value
                     self.indent_xml(tree.getroot())
-                    xmlstring = xmltree.tostring(tree.getroot(), encoding="utf-8")
+                    xmlstring = xmltree.tostring(tree.getroot())
                     fileobj = xbmcvfs.File(includes_file, 'w')
                     fileobj.write(xmlstring)
                     fileobj.close()
@@ -86,7 +86,7 @@ class SkinSettings:
         '''gets a list of all skin constants as set in the special xml file'''
         all_constants = {}
         all_variables = {}
-        addonpath = xbmc.translatePath(os.path.join("special://skin/", 'addon.xml').encode("utf-8"))
+        addonpath = xbmcvfs.translatePath(os.path.join("special://skin/", 'addon.xml').encode("utf-8"))
 
         addon = xmltree.parse(addonpath)
         extensionpoints = addon.findall("extension")
@@ -344,24 +344,24 @@ class SkinSettings:
                 if value and value == curvalue:
                     xbmc.executebuiltin(
                         "Skin.SetString(%s.label,%s)" %
-                        (settingid.encode("utf-8"), label.encode("utf-8")))
+                        (settingid, label))
 
                 # set the default value if current value is empty
                 if not (curvalue or curlabel):
                     if settingvalue["default"] and getCondVisibility(settingvalue["default"]):
                         xbmc.executebuiltin(
                             "Skin.SetString(%s.label,%s)" %
-                            (settingid.encode("utf-8"), label.encode("utf-8")))
+                            (settingid, label))
                         xbmc.executebuiltin(
                             "Skin.SetString(%s,%s)" %
-                            (settingid.encode("utf-8"), value.encode("utf-8")))
+                            (settingid, value))
                         # additional onselect actions
                         for action in settingvalue["onselectactions"]:
                             if action["condition"] and getCondVisibility(action["condition"]):
                                 command = action["command"]
                                 if "$" in command:
                                     command = xbmc.getInfoLabel(command)
-                                xbmc.executebuiltin(command.encode("utf-8"))
+                                xbmc.executebuiltin(command)
 
 
                 # process any multiselects
