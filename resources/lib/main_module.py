@@ -515,10 +515,10 @@ class MainModule:
                 success = recursive_delete_dir(del_path)
                 if success:
                     xbmcgui.Dialog().ok(heading=xbmc.getLocalizedString(19179),
-                                        line1=self.addon.getLocalizedString(32014), line2=self.addon.getLocalizedString(32014))
+                                        line1=self.addon.getLocalizedString(32014))
                 else:
                     xbmcgui.Dialog().ok(heading=xbmc.getLocalizedString(16205),
-                                        line1=xbmc.getLocalizedString(32015), line2=self.addon.getLocalizedString(32014))
+                                        line1=xbmc.getLocalizedString(32015))
 
     def overlaytexture(self):
         '''legacy: helper to let the user choose a background overlay from a skin defined folder'''
